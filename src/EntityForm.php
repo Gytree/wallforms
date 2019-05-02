@@ -35,6 +35,12 @@ class EntityForm
     public function generateForm()
     {
         $form = new Form();
+
+        if (property_exists($this->entity, $this->entity->keyField())) {
+            $key_field = $this->entity->keyField();
+            $form->offsetSet($key_field, Factory::hidden($this->entity->{$key_field}));
+        }
+
         foreach ($this->entity->inputFields() as $name => $field) {
             $type = isset($field['type']) ? $field['type'] : 'text';
 

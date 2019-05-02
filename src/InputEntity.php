@@ -2,6 +2,8 @@
 
 interface InputEntity
 {
+    public function keyField(): string;
+
     public function inputFields(): array;
 
     public function inputValidators();

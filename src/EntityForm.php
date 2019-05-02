@@ -98,6 +98,17 @@ class EntityForm
 
     public function isValid()
     {
-        return $this->form->isValid();
+        $is_valid = $this->form->isValid();
+        if (!$is_valid) {
+            /** @var Input $input */
+            foreach ($this->getInputs() as $input) {
+                if ($errors = $input->getError()) {
+                    foreach ($errors as $err) {
+                        $input->appendChild(new InputError($err->getMessage()));
+                    }
+                }
+            }
+        }
+        return $is_valid;
     }
 }

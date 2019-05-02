@@ -67,6 +67,13 @@ class EntityForm
             if (isset($this->entity->{$name})) {
                 $input->setValue($this->entity->{$name});
             }
+            if (isset($field['constraints'])) {
+                $constraints = $field['constraints'];
+                unset($field['constraints']);
+                foreach ($field['constraints'] as $validator) {
+                    $input->addConstraint($validator);
+                }
+            }
             $form->offsetSet($name, $input);
         }
         return $form;
@@ -88,5 +95,10 @@ class EntityForm
     public function __toString()
     {
         return $this->render();
+    }
+
+    public function isValid()
+    {
+        return $this->form->isValid();
     }
 }

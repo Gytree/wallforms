@@ -74,6 +74,9 @@ class EntityForm
 
     public function render()
     {
+        if (!$this->form->offsetExists('submit')) {
+            $this->form->offsetSet('submit', Factory::submit());
+        }
         return (string)$this->form;
     }
 

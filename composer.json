@@ -3,6 +3,7 @@
     "description": "Another form library for php",
     "type": "library",
     "license": "MIT",
+    "version": "0.0.1",
     "authors": [
         {
             "name": "gytree",

@@ -16,6 +16,9 @@ class Form
      */
     private $form;
 
+    public static $inputs_template = null;
+    public static $default_inputs_class = null;
+
     public function __construct(InputEntity $entity)
     {
         $this->entity = $entity;
@@ -30,10 +33,21 @@ class Form
 
             /** @var Input $input */
             $input = Factory::$type();
+            if (!is_null(self::$inputs_template)) {
+                $input->setTemplate(self::$inputs_template);
+            }
             $input->name = $name;
 
             $label = isset($field['label']) ? $field['label'] : $name;
             unset($field['label']);
+
+            if (!is_null(self::$default_inputs_class)) {
+                $class = self::$default_inputs_class;
+                if (isset($field['class'])) {
+                    $class .= " " . $field['class'];
+                }
+                $field['class'] = $class;
+            }
 
             $input->setAttributes($field);
             $input->setLabel($label);

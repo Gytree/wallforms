@@ -1,10 +1,10 @@
 <?php namespace Wallforms;
 
+use FormManager\Form;
 use FormManager\Factory;
-use FormManager\Form as MForm;
 use FormManager\Inputs\Input;
 
-class Form
+class EntityForm
 {
     /**
      * @var InputEntity
@@ -12,9 +12,9 @@ class Form
     private $entity;
 
     /**
-     * @var MForm
+     * @var Form
      */
-    private $form;
+    public $form;
 
     public static $inputs_template = null;
     public static $default_inputs_class = null;
@@ -23,11 +23,18 @@ class Form
     {
         $this->entity = $entity;
         $this->form = $this->generateForm();
+        $this->form->setAttribute('method', 'POST');
+    }
+
+
+    public function setAction($url)
+    {
+        $this->form->setAttribute('action', $url);
     }
 
     public function generateForm()
     {
-        $form = new MForm();
+        $form = new Form();
         foreach ($this->entity->inputFields() as $name => $field) {
             $type = isset($field['type']) ? $field['type'] : 'text';
 

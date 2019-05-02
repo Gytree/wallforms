@@ -68,11 +68,10 @@ class EntityForm
                 $input->setValue($this->entity->{$name});
             }
             if (isset($field['constraints'])) {
-                $constraints = $field['constraints'];
-                unset($field['constraints']);
                 foreach ($field['constraints'] as $validator) {
                     $input->addConstraint($validator);
                 }
+                unset($field['constraints']);
             }
             $form->offsetSet($name, $input);
         }

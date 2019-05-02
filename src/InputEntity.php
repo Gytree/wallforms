@@ -2,7 +2,7 @@
 
 interface InputEntity
 {
-    static function inputFields();
+    public function inputFields(): array;
 
-    static function inputValidators();
+    public function inputValidators();
 }

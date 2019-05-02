@@ -3,7 +3,7 @@
 class BasicEntity implements \Wallforms\InputEntity
 {
 
-    static function inputFields()
+    public function inputFields(): array
     {
         return [
             'name' => [
@@ -16,7 +16,7 @@ class BasicEntity implements \Wallforms\InputEntity
         ];
     }
 
-    static function inputValidators()
+    public function inputValidators()
     {
         // TODO: Implement inputValidators() method.
     }

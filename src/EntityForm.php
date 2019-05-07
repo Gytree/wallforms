@@ -62,7 +62,6 @@ class EntityForm
                 $field['class'] = $class;
             }
 
-            $input->setAttributes($field);
             $input->setLabel($label);
             if (isset($this->entity->{$name})) {
                 $input->setValue($this->entity->{$name});
@@ -73,6 +72,8 @@ class EntityForm
                 }
                 unset($field['constraints']);
             }
+
+            $input->setAttributes($field);
             $form->offsetSet($name, $input);
         }
         return $form;

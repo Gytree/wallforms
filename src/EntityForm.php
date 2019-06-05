@@ -44,8 +44,15 @@ class EntityForm
         foreach ($this->entity->inputFields() as $name => $field) {
             $type = isset($field['type']) ? $field['type'] : 'text';
 
-            /** @var Input $input */
-            $input = Factory::$type();
+            if ($type == 'select') {
+                if (!isset($field['options'])) {
+                    throw new \Exception('Missing select options');
+                }
+                $input = Factory::select('', $field['options']);
+            } else {
+                /** @var Input $input */
+                $input = Factory::$type();
+            }
             if (!is_null(self::$inputs_template)) {
                 $input->setTemplate(self::$inputs_template);
             }

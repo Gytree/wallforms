@@ -16,8 +16,8 @@ class BasicEntity implements \Wallforms\InputEntity
         ];
     }
 
-    public function inputValidators()
+    public function keyField(): string
     {
-        // TODO: Implement inputValidators() method.
+        return 'name';
     }
 }

@@ -1,11 +1,14 @@
 <?php
 
-class BasicFormRenderTest extends \PHPUnit\Framework\TestCase
+use Wallforms\EntityForm;
+use PHPUnit\Framework\TestCase;
+
+class BasicFormRenderTest extends TestCase
 {
     public function testFormCreation()
     {
         $entity = new BasicEntity();
-        $form = new \Wallforms\EntityForm($entity);
+        $form = new EntityForm($entity);
         $html = $form->render();
         $this->assertIsString($html);
         $name_input = '<input type="text" name="name" id="name">';

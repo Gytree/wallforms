@@ -48,7 +48,10 @@ class EntityForm
                 if (!isset($field['options'])) {
                     throw new \Exception('Missing select options');
                 }
-                $input = Factory::select('', $field['options']);
+                $options = $field['options'];
+                unset($field['options']);
+                $input = Factory::select('', $options);
+
             } else {
                 /** @var Input $input */
                 $input = Factory::$type();

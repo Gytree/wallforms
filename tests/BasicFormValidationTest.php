@@ -1,7 +1,7 @@
 <?php
 
 
-class BasicFormRenderTest extends TestCase
+class BasicFormValidationTest extends TestCase
 {
     public function testSimpleFormLoad()
     {

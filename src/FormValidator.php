@@ -3,6 +3,8 @@
 
 namespace Wallforms;
 
+use Valitron\Validator;
+
 /**
  * Class FormValidator
  * It's responsible for the EntityForm validation
@@ -17,7 +19,7 @@ class FormValidator
     protected $form;
 
     /**
-     * @var \Valitron\Validator
+     * @var Validator
      */
     protected $validator;
 
@@ -42,7 +44,7 @@ class FormValidator
 
     protected function createValidator()
     {
-        $validator = new \Valitron\Validator($this->form->getRawValues());
+        $validator = new Validator($this->form->getRawValues());
         $validator->mapFieldsRules($this->form->rules());
         return $validator;
     }

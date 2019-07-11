@@ -3,7 +3,6 @@
 
 class BasicFormRenderTest extends TestCase
 {
-
     public function testSimpleFormLoad()
     {
         $form = new TestBasicForm();

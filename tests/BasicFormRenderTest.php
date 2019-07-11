@@ -1,17 +1,13 @@
 <?php
 
-use Wallforms\EntityForm;
-use PHPUnit\Framework\TestCase;
 
 class BasicFormRenderTest extends TestCase
 {
-    public function testFormCreation()
+
+    public function testSimpleFormLoad()
     {
-        $entity = new BasicEntity();
-        $form = new EntityForm($entity);
-        $html = $form->render();
-        $this->assertIsString($html);
-        $name_input = '<input type="text" name="name" id="name">';
-        $this->assertStringContainsStringIgnoringCase($name_input, $html);
+        $form = new TestEntityBasicForm();
+        $form->load($this->getValidFormData($form));
+        $this->assertTrue($form->isValid());
     }
 }

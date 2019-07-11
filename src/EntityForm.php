@@ -1,125 +1,80 @@
-<?php namespace Wallforms;
+<?php
 
-use FormManager\Form;
-use FormManager\Factory;
-use FormManager\Inputs\Input;
 
-class EntityForm
+namespace Wallforms;
+
+
+abstract class EntityForm
 {
-    /**
-     * @var InputEntity
-     */
-    private $entity;
+    protected $raw_values;
 
     /**
-     * @var Form
+     * @var FormValidator
      */
-    public $form;
+    protected $validator;
 
-    public static $inputs_template = null;
-    public static $default_inputs_class = null;
-
-    public function __construct(InputEntity $entity)
+    public function __construct()
     {
-        $this->entity = $entity;
-        $this->form = $this->generateForm();
-        $this->form->setAttribute('method', 'POST');
+        $this->raw_values = [];
+        $this->validator = new FormValidator($this);
     }
 
+    /**
+     * Return the complete class name of the work entity
+     * @return string
+     */
+    public abstract function entity();
 
-    public function setAction($url)
+    /**
+     * Return an array with the form fields
+     * @return array
+     */
+    public abstract function fields();
+
+    /**
+     * Return an array with the form validators
+     * @return array
+     */
+    public function rules()
     {
-        $this->form->setAttribute('action', $url);
+        return [];
     }
 
-    public function generateForm()
+    /**
+     * @param array $data
+     */
+    public function load($data)
     {
-        $form = new Form();
-
-        if (property_exists($this->entity, $this->entity->keyField())) {
-            $key_field = $this->entity->keyField();
-            $form->offsetSet($key_field, Factory::hidden($this->entity->{$key_field}));
+        foreach ($this->fields() as $key => $field) {
+            $data_key = is_int($key) ? $field : $key;
+            if (isset($data[$data_key])) {
+                $this->raw_values[$data_key] = $data[$data_key];
+            }
         }
+    }
 
-        foreach ($this->entity->inputFields() as $name => $field) {
-            $type = isset($field['type']) ? $field['type'] : 'text';
-
-            if ($type == 'select') {
-                if (!isset($field['options'])) {
-                    throw new \Exception('Missing select options');
-                }
-                $options = $field['options'];
-                unset($field['options']);
-                $input = Factory::select('', $options);
-
-            } else {
-                /** @var Input $input */
-                $input = Factory::$type();
-            }
-            if (!is_null(self::$inputs_template)) {
-                $input->setTemplate(self::$inputs_template);
-            }
-            $input->name = $name;
-
-            $label = isset($field['label']) ? $field['label'] : $name;
-            unset($field['label']);
-
-            if (!is_null(self::$default_inputs_class)) {
-                $class = self::$default_inputs_class;
-                if (isset($field['class'])) {
-                    $class .= " " . $field['class'];
-                }
-                $field['class'] = $class;
-            }
-
-            $input->setLabel($label);
-            if (isset($this->entity->{$name})) {
-                $input->setValue($this->entity->{$name});
-            }
-            if (isset($field['constraints'])) {
-                foreach ($field['constraints'] as $validator) {
-                    $input->addConstraint($validator);
-                }
-                unset($field['constraints']);
-            }
-
-            $input->setAttributes($field);
-            $form->offsetSet($name, $input);
+    /**
+     * @param string $field
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getValue($field, $default = null)
+    {
+        if (isset($this->raw_values[$field])) {
+            return $this->raw_values[$field];
         }
-        return $form;
+        return $default;
     }
 
-    public function render()
+    public function getRawValues()
     {
-        if (!$this->form->offsetExists('submit')) {
-            $this->form->offsetSet('submit', Factory::submit('Submit'));
-        }
-        return (string)$this->form;
-    }
-
-    public function getInputs()
-    {
-        return $this->form->getIterator();
-    }
-
-    public function __toString()
-    {
-        return $this->render();
+        return $this->raw_values;
     }
 
     public function isValid()
     {
-        $is_valid = $this->form->isValid();
-        if (!$is_valid) {
-            /** @var Input $input */
-            foreach ($this->getInputs() as $input) {
-                if ($errors = $input->getError()) {
-                    foreach ($errors as $err) {
-                        $input->appendChild(new InputError($err->getMessage()));
-                    }
-                }
-            }
-        }
-        return $is_valid;
+        return $this->validator->isValid();
     }
+
+
 }

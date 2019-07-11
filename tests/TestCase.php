@@ -4,7 +4,7 @@
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @param \Wallforms\EntityForm $form
+     * @param \Wallforms\Form $form
      * @return array
      */
     protected function getValidFormData($form)
@@ -31,8 +31,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         switch ($type) {
             case 'int':
                 return random_int(0, 100);
-            case 'phone':
-                return '+134812341234';
+            case 'numeric':
+                return '134812341234';
             case 'text':
             default:
                 return 'hello world!';

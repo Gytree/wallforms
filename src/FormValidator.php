@@ -12,10 +12,13 @@ namespace Wallforms;
 class FormValidator
 {
     /**
-     * @var EntityForm
+     * @var Form
      */
     protected $form;
 
+    /**
+     * @var \Valitron\Validator
+     */
     protected $validator;
 
     public function __construct($form)
@@ -27,6 +30,14 @@ class FormValidator
     {
         $this->validator = static::createValidator();
         return $this->validator->validate();
+    }
+
+    public function getErrors()
+    {
+        if (!is_null($this->validator)) {
+            return $this->validator->errors();
+        }
+        return [];
     }
 
     protected function createValidator()

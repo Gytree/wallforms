@@ -1,8 +1,9 @@
 <?php
 
+
 use Wallforms\EntityForm;
 
-class TestEntityBasicForm extends EntityForm
+class TestBasicForm extends EntityForm
 {
 
     /**
@@ -21,7 +22,7 @@ class TestEntityBasicForm extends EntityForm
     {
         return [
             'name' => 'text',
-            'phone' => 'phone',
+            'phone' => 'int',
             'description' => 'text',
         ];
     }
@@ -30,7 +31,7 @@ class TestEntityBasicForm extends EntityForm
     {
         return [
             'name' => ['required'],
-            'phone' => ['required', 'phone'],
+            'phone' => ['required', 'numeric'],
             'description' => ['required']
         ];
     }

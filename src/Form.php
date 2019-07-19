@@ -34,17 +34,24 @@ abstract class Form
         return [];
     }
 
-    /**
-     * @param array $data
-     */
     public function load($data)
     {
         foreach ($this->fields() as $key => $field) {
             $data_key = is_int($key) ? $field : $key;
-            if (isset($data[$data_key])) {
-                $this->raw_values[$data_key] = $data[$data_key];
+            if ($value = $this->getDataValue($data, $data_key)) {
+                $this->raw_values[$data_key] = $value;
             }
         }
+    }
+
+    private function getDataValue($data, $key)
+    {
+        if (is_array($data) and isset($data[$key])) {
+            return $data[$key];
+        } else if (is_object($data) and property_exists($data, $key)) {
+            return $data->{$key};
+        }
+        return null;
     }
 
     /**
